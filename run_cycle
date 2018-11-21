@@ -1,0 +1,81 @@
+#!/bin/bash
+
+#./sim_predict Twocopy 15 40 200000 24 100 0 0
+
+echo "#!/bin/bash"
+a_copy=(Twocopy Threecopy)
+a_three=(40 60)
+a_four=(50000 100000 200000 500000 1000000)
+
+echo "#-----------------------1---------------------------"
+for i in ${a_copy[*]}
+do
+	if [ $i == "Twocopy" ]; then
+		for k in ${a_four[*]}
+		do
+			echo ./sim_predict $i 15 40 $k 24 100 0 0 
+			#       ./sim_predict $i 15 40 $k 24 100 0 0
+		done
+
+		for k in ${a_four[*]}
+		do
+			echo ./sim_predict $i 15 40 $k 24 100 80 360 
+			#       ./sim_predict $i 15 40 $k 24 100 80 360
+		done
+	else
+		for k in ${a_four[*]}
+		do
+			echo ./sim_predict $i 15 60 $k 24 100 0 0 
+			#       ./sim_predict $i 15 60 $k 24 100 0 0
+		done
+
+		for k in ${a_four[*]}
+		do
+			echo ./sim_predict $i 15 60 $k 24 100 80 360 
+			#       ./sim_predict $i 15 60 $k 24 100 80 360
+		done
+	fi
+done
+
+
+echo "#-----------------------2---------------------------"
+b_copy=(Twocopy Threecopy)
+b_three=(40 80 120 160 200)
+c_three=(60 120 180 240 300)
+
+for i in ${b_copy[*]}
+do
+	if [ $i == "Twocopy" ];then
+		for j in ${b_three[*]}
+		do
+			echo ./sim_predict $i 15 $j 100000 24 100 0 0
+			#   ./sim_predict $i 15 $j 100000 24 100 0 0
+		done
+	else
+		for j in ${c_three[*]}
+		do
+		echo ./sim_predict $i 15 $j 100000 24 100 0 0
+		#   ./sim_predict $i 15 $j 100000 24 100 0 0
+		done
+	fi
+done
+
+echo "#-----------------------3---------------------------"
+
+for i in ${b_copy[*]}
+do
+	if [ $i == "Twocopy" ];then
+		for j in ${b_three[*]}
+		do
+			echo ./sim_predict $i 15 $j 100000 24 100 80 360
+			#   ./sim_predict $i 15 $j 100000 24 100 80 360
+		done
+	else
+		for j in ${c_three[*]}
+		do
+		echo ./sim_predict $i 15 $j 100000 24 100 80 360
+		 #  ./sim_predict $i 15 $j 100000 24 100 80 360
+		done
+	fi  
+done
+

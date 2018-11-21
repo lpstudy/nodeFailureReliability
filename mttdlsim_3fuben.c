@@ -71,8 +71,6 @@ typedef struct
 volelem vol_matrix[MAX_DISKS];
 int row_matrix[2 * MAX_ROW][MAX_ROW];
 
-int failed_set[MAX_DISKS];
-//int send;
 
 int lend[2 * MAX_ROW];
 

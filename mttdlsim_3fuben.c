@@ -11,8 +11,6 @@
 // Total max disk numbers
 #define MAX_DISKS 50000
 
-#define MAX_ROW 40
-
 // Disk event type
 #define DISK_FAIL 0  // disk failure
 #define DAILY_REPAIR 1 // disk daily repair
@@ -53,27 +51,18 @@ int front_warn, end_warn;
 disk ld_disks[MAX_DISKS];
 int front_ld, end_ld, rend_ld;
 
+// gsl variables
 const gsl_rng_type *T;
 gsl_rng *r;
 
+// extern functions 
 typedef int (*array_failed)(int d, int n, int r);
 extern int __checkheap();
 extern void heap_insert(long time, int type, int disk_no, int node_no, int rack_no);
 extern int heap_search(int type, int disk_no, int node_no, int rack_no);
 extern void heap_delete(int i);
 
-typedef struct
-{
-    int first;
-    int second;
-} volelem;
-
-volelem vol_matrix[MAX_DISKS];
-int row_matrix[2 * MAX_ROW][MAX_ROW];
-
-
-int lend[2 * MAX_ROW];
-
+// check whether data loss happened
 double result[10000];
 int pro;
 int Twocopy_failed(int d, int n, int r)

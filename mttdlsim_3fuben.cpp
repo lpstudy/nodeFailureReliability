@@ -65,7 +65,11 @@ extern int heap_search(int type, int disk_no, int node_no, int rack_no);
 extern void heap_delete(int i);
 
 // log utility functions
-#define _TRACE(d, time, str) printf("%s[%d %d %d] time=%ld\n", str, d.disk_no, d.node_no, d.rack_no, time);
+#ifdef TDEBUG
+#define _TRACE(d, time, str) printf("%s[%d %d %d] time=%ld\n", str, d.disk_no, d.node_no, d.rack_no, time)
+#else
+#define _TRACE(d, time, str) {}
+#endif // DEBUG
 #define TRACE_LD(d, time) _TRACE(d, time, "DISK_LD")
 #define TRACE_SCRUB(d, time) _TRACE(d, time, "DISK_SCRUB")
 #define TRACE_FAIL(d, time) _TRACE(d, time, "DISK_FAIL")

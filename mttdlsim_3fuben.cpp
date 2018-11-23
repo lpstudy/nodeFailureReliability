@@ -416,11 +416,11 @@ int main(int argc, char *argv[])
             initialize();
             num_dloss = num_dloss + sim_num_loss(t);
             reps1++; //出现数据丢失的循环次数
-            /*	if( (reps1+1)%10 == 0){
-            printf("...repeat %d...\n",reps1);
-            printf("...num_dloss %d...\n",num_dloss);
-            fflush(stdout);
-            } */
+            if( (reps1+1)%10 == 0){
+            	printf("...repeat %d...\n",reps1);
+	            printf("...num_dloss %d...\n",num_dloss);
+        	    fflush(stdout);
+            } 
         }
         add_loss = add_loss + num_dloss;
         add_reps1 = add_reps1 + reps1;

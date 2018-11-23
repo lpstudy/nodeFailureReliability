@@ -769,11 +769,11 @@ int main(int argc, char *argv[])
 
             num_dloss=num_dloss+sim_num_loss(coding, disk, node, rack, Lyita_op, Lbita_op, Lgama_rest, Lyita_rest, Lbita_rest, Lyita_ld, Lbita_ld, Lgama_scrub, Lyita_scrub, Lbita_scrub, Lyita_tia, Lbita_tia, fdr, t);  
             reps1++;//出现数据丢失的循环次数
-            /*	if( (reps1+1)%10 == 0){
+            	if( (reps1+1)%10 == 0){
             printf("...repeat %d...\n",reps1);
             printf("...num_dloss %d...\n",num_dloss);
             fflush(stdout);
-            } */
+            } 
             }
             add_loss=add_loss+num_dloss;
             add_reps1=add_reps1+reps1;

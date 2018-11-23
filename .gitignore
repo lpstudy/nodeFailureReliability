@@ -1,0 +1,7 @@
+.vscode
+.vs
+Debug
+*.sdf
+*.opendb
+*.filters
+*.user

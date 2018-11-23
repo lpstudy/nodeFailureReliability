@@ -1,0 +1,44 @@
+#!/bin/bash
+#-----------------------1---------------------------
+./sim_predict Twocopy 15 40 50000 24 100 0 0
+./sim_predict Twocopy 15 40 100000 24 100 0 0
+./sim_predict Twocopy 15 40 200000 24 100 0 0
+./sim_predict Twocopy 15 40 500000 24 100 0 0
+./sim_predict Twocopy 15 40 1000000 24 100 0 0
+./sim_predict Twocopy 15 40 50000 24 100 80 360
+./sim_predict Twocopy 15 40 100000 24 100 80 360
+./sim_predict Twocopy 15 40 200000 24 100 80 360
+./sim_predict Twocopy 15 40 500000 24 100 80 360
+./sim_predict Twocopy 15 40 1000000 24 100 80 360
+./sim_predict Threecopy 15 60 50000 24 100 0 0
+./sim_predict Threecopy 15 60 100000 24 100 0 0
+./sim_predict Threecopy 15 60 200000 24 100 0 0
+./sim_predict Threecopy 15 60 500000 24 100 0 0
+./sim_predict Threecopy 15 60 1000000 24 100 0 0
+./sim_predict Threecopy 15 60 50000 24 100 80 360
+./sim_predict Threecopy 15 60 100000 24 100 80 360
+./sim_predict Threecopy 15 60 200000 24 100 80 360
+./sim_predict Threecopy 15 60 500000 24 100 80 360
+./sim_predict Threecopy 15 60 1000000 24 100 80 360
+#-----------------------2---------------------------
+./sim_predict Twocopy 15 40 100000 24 100 0 0
+./sim_predict Twocopy 15 80 100000 24 100 0 0
+./sim_predict Twocopy 15 120 100000 24 100 0 0
+./sim_predict Twocopy 15 160 100000 24 100 0 0
+./sim_predict Twocopy 15 200 100000 24 100 0 0
+./sim_predict Threecopy 15 60 100000 24 100 0 0
+./sim_predict Threecopy 15 120 100000 24 100 0 0
+./sim_predict Threecopy 15 180 100000 24 100 0 0
+./sim_predict Threecopy 15 240 100000 24 100 0 0
+./sim_predict Threecopy 15 300 100000 24 100 0 0
+#-----------------------3---------------------------
+./sim_predict Twocopy 15 40 100000 24 100 80 360
+./sim_predict Twocopy 15 80 100000 24 100 80 360
+./sim_predict Twocopy 15 120 100000 24 100 80 360
+./sim_predict Twocopy 15 160 100000 24 100 80 360
+./sim_predict Twocopy 15 200 100000 24 100 80 360
+./sim_predict Threecopy 15 60 100000 24 100 80 360
+./sim_predict Threecopy 15 120 100000 24 100 80 360
+./sim_predict Threecopy 15 180 100000 24 100 80 360
+./sim_predict Threecopy 15 240 100000 24 100 80 360
+./sim_predict Threecopy 15 300 100000 24 100 80 360

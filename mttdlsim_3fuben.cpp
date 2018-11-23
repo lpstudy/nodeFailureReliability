@@ -174,7 +174,6 @@ inline bool remove_event_from_heap(disk_struct d, int ev_type)
 
 void initialize()
 {
-    int i, j, k;
     events = 0;
     event_heap[0].time = 0;
 
@@ -198,15 +197,8 @@ double test_mttdl_cycle;
 
 double sim_num_loss(double t)
 {
-    int disk_no, rack_no, type, number;
-    int node_no, n;
-    long time_ld;
-    long time_scrub;
-    long time_mttr;
-    long time_op;
-    long time_tia;
+    int type;
     int num_loss = 0; //数据丢失数量
-    int i, j;
     //   int test_mttdl_num = 1;
     long time;
 
@@ -352,7 +344,7 @@ int main(int argc, char *argv[])
 {
     double result[10000];
     int i, reps1, num_dloss, reps2, add_reps1 = 0, add_loss = 0;
-    double pro_loss, mttdl, t;
+    double pro_loss, t;
 
     if (argc < 19)
     {
@@ -400,7 +392,6 @@ int main(int argc, char *argv[])
     reps2 = atof(argv[24]); // 10
     srand((unsigned)time(NULL));
 
-    mttdl = 0.0;
     gsl_rng_env_setup();
     T = gsl_rng_default;
     r = gsl_rng_alloc(T);
@@ -578,11 +569,9 @@ inline void heap_delete(int i)
 // check whether data loss happened
 int Threecopy_failed(int d, int n, int r)
 {
-	int i, j, k, pro;
+	int i, j, k;
 	int rack_no1, rack_no2, rack_no3;
 	int node_no1, node_no2, node_no3;
-	int disk_no1, disk_no2, disk_no3;
-	pro = ((r - 1) * (n - 1) * n * d * d);
 
 	if (((failed_disks.end + MAX_DISKS - failed_disks.front) % MAX_DISKS) <= 2) {
 		return 0;

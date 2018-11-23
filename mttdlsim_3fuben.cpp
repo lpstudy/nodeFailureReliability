@@ -94,7 +94,7 @@ double Lgama_rest, Lyita_rest, Lbita_rest; // disk repair
 // warn_disks的存在感觉没有价值，并不会用来判断data_loss
 disk_array failed_disks, warn_disks, ld_disks, failed_nodes;
 
-void events_for_new_disk(disk_struct d)
+inline void events_for_new_disk(disk_struct d)
 {
     int j = d.disk_no, k = d.node_no, i = d.rack_no;
     long time_op, time_ld, time_scrub, time_tia;
@@ -112,39 +112,39 @@ void events_for_new_disk(disk_struct d)
     time_scrub = Lgama_scrub + gsl_ran_weibull(r, Lyita_scrub, Lbita_scrub);
     heap_insert(time_scrub, DISK_SCRUB, j, k, i);
 }
-void event_failure_for_node(disk_struct d)
+inline void event_failure_for_node(disk_struct d)
 {
     long time_op = gsl_ran_weibull(r, Lyita_node, Lbita_node);
     heap_insert(time_op, NODE_FAIL, -1, d.node_no, d.rack_no);
 }
-void event_repair_for_node(disk_struct d, long time)
+inline void event_repair_for_node(disk_struct d, long time)
 {
     long time_mttr = Lgama_node_rest + gsl_ran_weibull(r, Lyita_node_rest, Lbita_node_rest);
     heap_insert(time + time_mttr, NODE_REPAIRED, -1, d.node_no, d.rack_no);
 }
-void event_scrub_for_disk(disk_struct d, long time) 
+inline void event_scrub_for_disk(disk_struct d, long time) 
 {
     long time_scrub = time + Lgama_scrub + gsl_ran_weibull(r, Lyita_scrub, Lbita_scrub);
     heap_insert(time_scrub, DISK_SCRUB, d.disk_no, d.node_no, d.rack_no);
 }
-void event_ld_for_disk(disk_struct d, long time)
+inline void event_ld_for_disk(disk_struct d, long time)
 {
     long time_ld = time + gsl_ran_weibull(r, Lyita_ld, Lbita_ld);
     heap_insert(time_ld, DISK_LD, d.disk_no, d.node_no, d.rack_no);
 }
-void event_repair_for_disk(disk_struct d, long time)
+inline void event_repair_for_disk(disk_struct d, long time)
 {
     long time_mttr = Lgama_rest + gsl_ran_weibull(r, Lyita_rest, Lbita_rest);
     heap_insert(time + time_mttr, DISK_REPAIRED, d.disk_no, d.node_no, d.rack_no);
 } 
 // C++引用
-void add_disk_to_array(disk_array& darray, disk_struct d)
+inline void add_disk_to_array(disk_array& darray, disk_struct d)
 {
     darray.disks[darray.end] = d;
     darray.end++;
     darray.end %= MAX_DISKS;
 }
-void remove_disk_from_array(disk_array& darray, disk_struct d)
+inline void remove_disk_from_array(disk_array& darray, disk_struct d)
 {
 	int j = 0;
     for (int i = darray.front; i != darray.end; i++, i %= MAX_DISKS)
@@ -161,7 +161,7 @@ void remove_disk_from_array(disk_array& darray, disk_struct d)
     darray.end = (darray.end + MAX_DISKS - j) % MAX_DISKS;
 }
 // true for truly deleting
-bool remove_event_from_heap(disk_struct d, int ev_type)
+inline bool remove_event_from_heap(disk_struct d, int ev_type)
 {
     int number = heap_search(ev_type, d.disk_no, d.node_no, d.rack_no);
     if (number > 0)
@@ -448,7 +448,7 @@ int main(int argc, char *argv[])
  *  heap_search: 搜索event
  *  heap_delete: 删除给定索引的event
  ****************************************************************/
-void heap_insert(long time, int type, int disk_no, int node_no, int rack_no)
+inline void heap_insert(long time, int type, int disk_no, int node_no, int rack_no)
 {
     int i, p;
     int j;
@@ -477,7 +477,7 @@ void heap_insert(long time, int type, int disk_no, int node_no, int rack_no)
     event_heap[i].rack_no = rack_no;
 }
 
-int heap_search(int type, int disk_no, int node_no, int rack_no)
+inline int heap_search(int type, int disk_no, int node_no, int rack_no)
 {
     int i;
     for (i = 1; i <= events; i++)
@@ -490,7 +490,7 @@ int heap_search(int type, int disk_no, int node_no, int rack_no)
     return -1;
 }
 
-static void __MinHeapIfy(int i)
+inline void __MinHeapIfy(int i)
 {
     int min = i;
     int left = 2 * i;
@@ -518,7 +518,7 @@ static void __MinHeapIfy(int i)
 }
 
 //x节点的time减小到更小的值
-static void __HeapDecreaseKey(int x)
+inline void __HeapDecreaseKey(int x)
 {
     event tmp;
     while (x > 1 && event_heap[x >> 1].time > event_heap[x].time)
@@ -530,7 +530,7 @@ static void __HeapDecreaseKey(int x)
     }
 }
 
-int __checkheap()
+inline int __checkheap()
 {
     int i, left, right;
     int end = events >> 1;
@@ -549,7 +549,7 @@ int __checkheap()
 }
 
 //删除堆中指定元素i
-void heap_delete(int i)
+inline void heap_delete(int i)
 {
 
     event_heap[0] = event_heap[i];

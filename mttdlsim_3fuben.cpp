@@ -160,7 +160,7 @@ vector<vector<disk_struct>> combine_darray(disk_array& darray, int m) {
 
 //根据传入的编码方案，以及故障的磁盘数目failed_d_num和节点数据failed_n_num，计算数据丢失概率
 double func_probability(int coding, const vector<disk_struct>& failed_d_num, 
-	const vector<disk_struct>& failed_n_num, disk_struct& disk, bool is_all_nodes_failre) {
+	const vector<disk_struct>& failed_n_num, disk_struct& disk) {
 	// 跳过不包含当前disk的磁盘
 	bool is_find = false;
 	for (auto it : failed_d_num) {
@@ -175,12 +175,14 @@ double func_probability(int coding, const vector<disk_struct>& failed_d_num,
 			break;
 		}
 	}
-	// 我们需要跳过不包含当前故障的disk的磁盘
+	// 1. 我们需要跳过不包含当前故障的disk的磁盘
 	if (!is_find) {
 		return 0.0; 
 	}
 
+	// 2. 我们需要跳过不可能引起故障的情形，例如对于RShorizontal，如果不跨越rs_m+1个机架，就不可能引起数据丢失
 
+	// 3. 针对不同的编码方案和故障情形，计算相应的概率值
 	if (coding == RShorizontal) {
 
 	}
@@ -207,8 +209,8 @@ bool is_data_loss_with_m_fails(disk_struct disk, int event_type) {
 	// 然后再把当前的disk加入进去。由于时间关系，先简单的寻找m+1个failed，然后跳过不包含当前故障的disk。
 
 	int m = rs_m + 1;
-	// 1. x个磁盘故障，x > 0, m-x个节点故障
-	for (int x = 1; x <= m; ++x) {
+	// x个磁盘故障，x >= 0, m-x个节点故障
+	for (int x = 0; x <= m; ++x) {
 		int n_nums = m - x;
 		vector<vector<disk_struct>> disks_vec = combine_darray(failed_disks, x);
 		vector<vector<disk_struct>> nodes_vec = combine_darray(failed_nodes, n_nums);
@@ -216,18 +218,15 @@ bool is_data_loss_with_m_fails(disk_struct disk, int event_type) {
 		// 选择x个磁盘和m-x个节点故障，并判断是否发生数据丢失
 		for (auto i : disks_vec) {
 			for (auto j : nodes_vec) {
-				double prob = func_probability(coding, i, j, disk, false);
+				// 如果选择的故障磁盘+节点个数总和不等于m，那么不可能引起数据丢失
+				if (i.size() + j.size() != m) continue;
+
+				double prob = func_probability(coding, i, j, disk);
 				if (data_loss_with_prob(prob)) return true;
 			}
 		}
 	}
-	// 2. m个节点故障
-	vector<vector<disk_struct>> nodes_vec = combine_darray(failed_nodes, m);
-	vector<disk_struct> disks_vec;
-	for (auto j : nodes_vec) {
-		double prob = func_probability(coding, disks_vec, j, disk, false);
-		if (data_loss_with_prob(prob)) return true;
-	}
+	
 	return false;
 }
 

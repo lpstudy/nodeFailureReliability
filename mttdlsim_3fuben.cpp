@@ -239,42 +239,42 @@ inline void events_for_new_disk(disk_struct d)
     int j = d.disk_no, k = d.node_no, i = d.rack_no;
     long time_op, time_ld, time_scrub, time_tia;
     // disk failure and prediction
-    time_op = gsl_ran_weibull(r, Lyita_op, Lbita_op);
+    time_op = (long)gsl_ran_weibull(r, Lyita_op, Lbita_op);
     heap_insert(time_op, DISK_FAIL, j, k, i);
     if ((rand() % 10000) < fdr * 100)
     {
-        time_tia = 1 + gsl_ran_weibull(r, Lyita_tia, Lbita_tia);
+        time_tia = 1 + (long)gsl_ran_weibull(r, Lyita_tia, Lbita_tia);
         heap_insert((time_op - time_tia) >= 0 ? (time_op - time_tia) : 0, DISK_WARN, j, k, i);
     }
     // ld and scrub will be ommited in the insert
-    time_ld = gsl_ran_weibull(r, Lyita_ld, Lbita_ld);
+    time_ld = (long)gsl_ran_weibull(r, Lyita_ld, Lbita_ld);
     heap_insert(time_ld, DISK_LD, j, k, i);
-    time_scrub = Lgama_scrub + gsl_ran_weibull(r, Lyita_scrub, Lbita_scrub);
+    time_scrub = (long)(Lgama_scrub + gsl_ran_weibull(r, Lyita_scrub, Lbita_scrub));
     heap_insert(time_scrub, DISK_SCRUB, j, k, i);
 }
 inline void event_failure_for_node(disk_struct d)
 {
-    long time_op = gsl_ran_weibull(r, Lyita_node, Lbita_node);
+    long time_op = (long)gsl_ran_weibull(r, Lyita_node, Lbita_node);
     heap_insert(time_op, NODE_FAIL, -1, d.node_no, d.rack_no);
 }
 inline void event_repair_for_node(disk_struct d, long time)
 {
-    long time_mttr = Lgama_node_rest + gsl_ran_weibull(r, Lyita_node_rest, Lbita_node_rest);
+    long time_mttr = (long)(Lgama_node_rest + gsl_ran_weibull(r, Lyita_node_rest, Lbita_node_rest));
     heap_insert(time + time_mttr, NODE_REPAIRED, -1, d.node_no, d.rack_no);
 }
 inline void event_scrub_for_disk(disk_struct d, long time) 
 {
-    long time_scrub = time + Lgama_scrub + gsl_ran_weibull(r, Lyita_scrub, Lbita_scrub);
+    long time_scrub = (long)(time + Lgama_scrub + gsl_ran_weibull(r, Lyita_scrub, Lbita_scrub));
     heap_insert(time_scrub, DISK_SCRUB, d.disk_no, d.node_no, d.rack_no);
 }
 inline void event_ld_for_disk(disk_struct d, long time)
 {
-    long time_ld = time + gsl_ran_weibull(r, Lyita_ld, Lbita_ld);
+    long time_ld = time + (long)gsl_ran_weibull(r, Lyita_ld, Lbita_ld);
     heap_insert(time_ld, DISK_LD, d.disk_no, d.node_no, d.rack_no);
 }
 inline void event_repair_for_disk(disk_struct d, long time)
 {
-    long time_mttr = Lgama_rest + gsl_ran_weibull(r, Lyita_rest, Lbita_rest);
+    long time_mttr = (long)(Lgama_rest + gsl_ran_weibull(r, Lyita_rest, Lbita_rest));
     heap_insert(time + time_mttr, DISK_REPAIRED, d.disk_no, d.node_no, d.rack_no);
 } 
 // C++引用
@@ -335,7 +335,7 @@ void initialize()
 int test_mttdl;
 double test_mttdl_cycle;
 
-double sim_num_loss(double t)
+int sim_num_loss(double t)
 {
     int type;
     int num_loss = 0; //数据丢失数量
@@ -534,10 +534,10 @@ int main(int argc, char *argv[])
 	Lbita_node_rest = atof(argv[21]); //2
     fdr = atof(argv[22]); // 80
     t = atof(argv[23]); // 43800 5年
-    reps2 = atof(argv[24]); // 10
+    reps2 = atoi(argv[24]); // 10
 	rs_k = atoi(argv[25]); // rs_k
 	rs_m = atoi(argv[26]);
-	fprintf(stderr, "disk:%d node:%d rack:%d fdr:%.0f coding:%s(%d,%d) t:%.1fyear reps:%.0f\n", 
+	fprintf(stderr, "disk:%d node:%d rack:%d fdr:%.0f coding:%s(%d,%d) t:%.1fyear reps:%d\n", 
 		disk, node, rack, fdr, argv[1], rs_k, rs_m, t/24/365, reps2);
     srand((unsigned)time(NULL));
 
@@ -545,7 +545,7 @@ int main(int argc, char *argv[])
     T = gsl_rng_default;
     r = gsl_rng_alloc(T);
 
-    gsl_rng_set(r, time(NULL));
+    gsl_rng_set(r, (unsigned long)time(NULL));
 
     for (i = 0; i < reps2; i++)
     {

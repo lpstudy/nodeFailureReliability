@@ -86,7 +86,7 @@ array_failed func[] = { Threecopy_failed, Threecopy_failed };
 /*****************************************************
  * Global variables which can be used anywhere
  ****************************************************/
-int disk, node, rack, coding;
+int disk, node, rack, coding, rs_k, rs_m;
 double Lyita_op,  Lbita_op, Lyita_tia, Lbita_tia, fdr; // failure & prediction
 double Lyita_ld,  Lbita_ld,  Lgama_scrub, Lyita_scrub, Lbita_scrub; // ld & scrub
 double Lyita_node, Lbita_node, Lgama_node_rest, Lyita_node_rest, Lbita_node_rest; // node failure & repair

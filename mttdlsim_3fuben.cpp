@@ -23,6 +23,7 @@
 // data coding mode
 #define Twocopy 0
 #define Threecopy 1
+#define RS 2
 
 // event and disk structure
 typedef struct
@@ -348,15 +349,17 @@ int main(int argc, char *argv[])
 
     if (argc < 19)
     {
-        printf("Usage: mttdlsim coding (Twocopy/Threecopy) disks nodes racks  Lyita_op Lbita_op Lgama_rest Lyita_rest Lbita_rest Lyita_ld, Lbita_ld, Lgama_scrub, Lyita_scrub, Lbita_scrub Lyita_tia Lbita_tia FDR t reps\n"); //fdr 90.59
+        printf("Usage: mttdlsim coding (Twocopy/Threecopy/RS) disks nodes racks  Lyita_op Lbita_op Lgama_rest Lyita_rest Lbita_rest Lyita_ld, Lbita_ld, Lgama_scrub, Lyita_scrub, Lbita_scrub Lyita_tia Lbita_tia FDR t reps rs_k rs_m\n");
         return -1;
     }
 
     if (!strcmp(argv[1], "Twocopy"))
         coding = Twocopy;
-    else if (!strcmp(argv[1], "Threecopy"))
-        coding = Threecopy;
-    else
+	else if (!strcmp(argv[1], "Threecopy"))
+		coding = Threecopy;
+	else if (!strcmp(argv[1], "RS"))
+		coding = RS;
+	else
     {
         printf("coding BUG\n");
         return -1;
@@ -366,6 +369,7 @@ int main(int argc, char *argv[])
 
 	// new version
 	//./sim_predict Threecopy 4 15 60 461386 1.1 6 12 2 9259 1 6 168 3 354 1 461386 1.1  6 12 2  80 43800 10
+	//./sim_predict RS 4 15 60 461386 1.1 6 12 2 9259 1 6 168 3 354 1 461386 1.1  6 12 2  80 43800 10 6 3 
 	//  0.000897
     disk = atoi(argv[2]); // 4
     node = atoi(argv[3]); // 15
@@ -390,6 +394,12 @@ int main(int argc, char *argv[])
     fdr = atof(argv[22]); // 80
     t = atof(argv[23]); // 43800 5Äê
     reps2 = atof(argv[24]); // 10
+	if (coding == RS) {
+		rs_k = atoi(argv[25]); // rs_k
+		rs_m = atoi(argv[26]);
+	}
+	fprintf(stderr, "disk:%d node:%d rack:%d fdr:%.0f coding:%s(%d,%d) t:%.1fyear reps:%.0f\n", 
+		disk, node, rack, fdr, argv[1], rs_k, rs_m, t/24/365, reps2);
     srand((unsigned)time(NULL));
 
     gsl_rng_env_setup();
